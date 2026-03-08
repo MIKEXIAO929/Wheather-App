@@ -15,24 +15,28 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     
 </head>
-<body class="bg-light">
-    
-        <div class="d-flex justify-content-center align-items-center vh-100">
-            <div class="col-12 col-md-8 col-lg-6">
-                <div class="card-body text-center p-4">
-                        <h1 id="lblCity" class="mb-3">Cookeville</h1>
+<body class="min-vh-100 d-flex align-items-center" style="background: linear-gradient(to bottom right, #74b9ff, #dfe6e9);">
+    <div class="container">
+        <div class="row justify-content-center w-100">
+            <div class="col-12 col-md-8 col-lg-5">
+                <div class="card shadow-lg rounded-4 border-0 bg-primary text-white">
+                    <div class="card-body text-center p-5">
+                        <h1 id="lblCity" class="fw-bold display-5 mb-3">Cookeville</h1>
                         <i id="icoWeather" class="bi bi-cloud-sun fs-1" aria-hidden="true"></i>
-                        <p id="lblCondition" class="mt-2 mb-3">Partly Cloudy</p>
-                        <h2 id="lblTemp" class="mb-2">72 °F</h2>
-                        <p id="lblHumidity" class="mb-0">Humidity: 45%</p>
+                        <p id="lblCondition" class="mt-2 mb-3 fs-5">Partly Cloudy</p>
+                        <h2 id="lblTemp" class="display-4 fw-bold mb-2">72 °F</h2>
+                        <p id="lblHumidity" class="mb-0 fs-5">Humidity: 45%</p>
                     </div>
                 </div>
-
+ 
                 <footer class="text-center mt-3">
                     Weather data source
-                    <a href="https://open-meteo.com/" target="_blank">Open-Meteo</a>
+                    <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a>
                 </footer>
             </div>
+        </div>
+    </div>
+</body>
         
     
 
