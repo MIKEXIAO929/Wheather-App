@@ -15,23 +15,23 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     
 </head>
-<body class="min-vh-100 d-flex align-items-center" style="background: linear-gradient(to bottom right, #74b9ff, #dfe6e9);">
+<body class="min-vh-100 d-flex align-items-center">
     <div class="container">
         <div class="row justify-content-center w-100">
             <div class="col-12 col-md-8 col-lg-5">
                 <div class="card shadow-lg rounded-4 border-0 bg-primary text-white">
                     <div class="card-body text-center p-5">
-                        <h1 id="lblCity">Cookeville</h1>
-                        <i id="icoWeather" class="bi bi-cloud-sun fs-1"></i>
-                        <p id="lblCondition">Loading weather...</p>
-                        <h2 id="lblTemp">-- °F</h2>
-                        <p id="lblHumidity">Humidity: --%</p>
+                        <h1 id="lblcity">Cookeville</h1>
+                        <i id="icoweather" class="bi bi-cloud-sun fs-1"></i>
+                        <p id="lblcondition">Loading Please wait</p>
+                        <h2 id="lbltemp">-- °F</h2>
+                        <p id="lblhumidity">Humidity: --%</p>
                     </div>
                 </div>
  
                 <footer class="text-center mt-3">
                     Data Source
-                    <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a>
+                <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo</a>
                 </footer>
             </div>
         </div>
@@ -41,66 +41,61 @@
     
 
     <script>
-        const strWeatherURL = "https://api.open-meteo.com/v1/forecast?latitude=36.1628&longitude=-85.5016&current=temperature_2m,relative_humidity_2m,weather_code&temperature_unit=fahrenheit&timezone=America%2FChicago";
+        const strweatherURL = "https://api.open-meteo.com/v1/forecast?latitude=36.1628&longitude=-85.5016&current=temperature_2m,relative_humidity_2m,weather_code&temperature_unit=fahrenheit&timezone=America%2FChicago";
 
-        // fetch() sends a request to the API
         fetch(strWeatherURL)
-            .then(response => {
-                // check if the request worked
-                if (!response.ok) {
-                    throw new Error("Weather data could not be loaded.");
-                }
+        .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            return null;
+        }
+    })
+    .then(data => {
+        if (data === null) {
+            document.querySelector("#lblcondition").textContent = "there was an error loading data.";
+            document.querySelector("#lbltemp").textContent = "°F";
+            document.querySelector("#lblhumidity").textContent = "Humidity: %";
+        } else {
+            document.querySelector("#lbltemp").textContent =
+                `${data.current.temperature_2m} °F`;
 
-                // convert the response into JSON
-                return response.json();
-            })
-            .then(data => {
-                // update temperature
-                document.querySelector("#lblTemp").textContent =
-                    `${data.current.temperature_2m} °F`;
+            document.querySelector("#lblhumidity").textContent =
+                `Humidity: ${data.current.relative_humidity_2m}%`;
 
-                // update humidity
-                document.querySelector("#lblHumidity").textContent =
-                    `Humidity: ${data.current.relative_humidity_2m}%`;
+            let intWeatherCode = data.current.weather_code;
 
-                // get weather code from API
-                let intWeatherCode = data.current.weather_code;
-
-                // choose text and icon based on weather code
-                if (intWeatherCode === 0) {
-                    document.querySelector("#lblCondition").textContent = "Clear Sky";
-                    document.querySelector("#icoWeather").className = "bi bi-brightness-high fs-1";
-                }
-                else if (intWeatherCode >= 1 && intWeatherCode <= 3) {
-                    document.querySelector("#lblCondition").textContent = "Partly Cloudy";
-                    document.querySelector("#icoWeather").className = "bi bi-cloud-sun fs-1";
-                }
-                else if (intWeatherCode >= 51 && intWeatherCode <= 67) {
-                    document.querySelector("#lblCondition").textContent = "Rainy";
-                    document.querySelector("#icoWeather").className = "bi bi-cloud-rain fs-1";
-                }
-                else if (intWeatherCode >= 71 && intWeatherCode <= 77) {
-                    document.querySelector("#lblCondition").textContent = "Snow";
-                    document.querySelector("#icoWeather").className = "bi bi-cloud-snow fs-1";
-                }
-                else if (intWeatherCode >= 95) {
-                    document.querySelector("#lblCondition").textContent = "Thunderstorm";
-                    document.querySelector("#icoWeather").className = "bi bi-cloud-lightning-rain fs-1";
-                }
-                else {
-                    document.querySelector("#lblCondition").textContent = "Weather Unavailable";
-                    document.querySelector("#icoWeather").className = "bi bi-cloud fs-1";
-                }
-            })
-            .catch(error => {
-                console.log(error);
-
-                document.querySelector("#lblCondition").textContent = "Unable to load weather data";
-                document.querySelector("#lblTemp").textContent = "-- °F";
-                document.querySelector("#lblHumidity").textContent = "Humidity: --%";
-            });
-    
+            if (intWeatherCode === 0) {
+                document.querySelector("#lblcondition").textContent = "clear sky";
+                document.querySelector("#icoweather").className = "bi bi-brightness-high fs-1";
+            }
+            else if (intWeatherCode >= 1 && intWeatherCode <= 3) {
+                document.querySelector("#lblcondition").textContent = "partly cloudy";
+                document.querySelector("#icoweather").className = "bi bi-cloud-sun fs-1";
+            }
+            else if (intWeatherCode >= 51 && intWeatherCode <= 67) {
+                document.querySelector("#lblcondition").textContent = "rainy";
+                document.querySelector("#icoweather").className = "bi bi-cloud-rain fs-1";
+            }
+            else if (intWeatherCode >= 71 && intWeatherCode <= 77) {
+                document.querySelector("#lblcondition").textContent = "snow";
+                document.querySelector("#icoweather").className = "bi bi-cloud-snow fs-1";
+            }
+            else if (intWeatherCode >= 95) {
+                document.querySelector("#lblcondition").textContent = "thunderstorm";
+                document.querySelector("#icoweather").className = "bi bi-cloud-lightning-rain fs-1";
+            }
+            else {
+                document.querySelector("#lblcondition").textContent = "weather unavailable";
+                document.querySelector("#icoweather").className = "bi bi-cloud fs-1";
+            }
+        }
+    })
+    .catch(() => {
+        document.querySelector("#lblcondition").textContent = "there was an error loading data.";
+        document.querySelector("#lbltemp").textContent = "-- °F";
+        document.querySelector("#lblhumidity").textContent = "Humidity: --%";
+    });
     </script>
 </body>
-
 </html>
