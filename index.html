@@ -55,15 +55,7 @@
     //error handler for cases like server error and such
     .then(data => {
 
-        if (data === null) {
-
-            document.querySelector("#condition").innerHTML = "there was an error loading data.";
-
-            document.querySelector("#temp").innerHTML = "°F";
-
-            document.querySelector("#humidity").innerHTML = "Humidity: %";
-        } else {
-            //if successful we insert the real data
+            //successful we insert the real data
             document.querySelector("#temp").innerHTML = `${data.current.temperature_2m} °F`;
 
             document.querySelector("#humidity").innerHTML = `Humidity: ${data.current.relative_humidity_2m}%`;
@@ -108,7 +100,7 @@
                 document.querySelector("#weather").className = "bi bi-cloud fs-1";
             }
         }
-    })
+    )
     //error handing for cases such as no internet or request crashed
     .catch(() => {
         document.querySelector("#condition").innerHTML = "there was an error loading data.";
