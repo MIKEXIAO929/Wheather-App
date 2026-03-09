@@ -15,17 +15,17 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     
 </head>
-<body class="min-vh-100 d-flex align-items-center">
+<body class="min-vh-100 d-flex align-items-center" style="background-image: url('img/background.png')">
     <div class="container">
         <div class="row justify-content-center w-100">
             <div class="col-12 col-md-8 col-lg-5">
                 <div class="card shadow-lg rounded-4 border-0 bg-primary text-white">
                     <div class="card-body text-center p-5">
-                        <h1 id="lblcity">Cookeville</h1>
-                        <i id="icoweather" class="bi bi-cloud-sun fs-1"></i>
-                        <p id="lblcondition">Loading Please wait</p>
-                        <h2 id="lbltemp">-- °F</h2>
-                        <p id="lblhumidity">Humidity: --%</p>
+                        <h1 id="city">Cookeville</h1>
+                        <i id="weather" class="bi bi-cloud-sun fs-1"></i>
+                        <p id="condition">loading please wait</p>
+                        <h2 id="temp">-- °F</h2>
+                        <p id="humidity">Humidity: --%</p>
                     </div>
                 </div>
  
@@ -36,65 +36,85 @@
             </div>
         </div>
     </div>
-</body>
+
         
     
 
     <script>
+        //base URL here
         const strweatherURL = "https://api.open-meteo.com/v1/forecast?latitude=36.1628&longitude=-85.5016&current=temperature_2m,relative_humidity_2m,weather_code&temperature_unit=fahrenheit&timezone=America%2FChicago";
 
-        fetch(strWeatherURL)
-        .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            return null;
-        }
+        //fetch for the real data
+        fetch(strweatherURL)
+        .then(response => response.json())
+        .then(data => {
+        console.log(data);
+        return data
     })
+    //error handler for cases like server error and such
     .then(data => {
+
         if (data === null) {
-            document.querySelector("#lblcondition").textContent = "there was an error loading data.";
-            document.querySelector("#lbltemp").textContent = "°F";
-            document.querySelector("#lblhumidity").textContent = "Humidity: %";
+
+            document.querySelector("#condition").innerHTML = "there was an error loading data.";
+
+            document.querySelector("#temp").innerHTML = "°F";
+
+            document.querySelector("#humidity").innerHTML = "Humidity: %";
         } else {
-            document.querySelector("#lbltemp").textContent =
-                `${data.current.temperature_2m} °F`;
+            //if successful we insert the real data
+            document.querySelector("#temp").innerHTML = `${data.current.temperature_2m} °F`;
 
-            document.querySelector("#lblhumidity").textContent =
-                `Humidity: ${data.current.relative_humidity_2m}%`;
+            document.querySelector("#humidity").innerHTML = `Humidity: ${data.current.relative_humidity_2m}%`;
 
+            //Apply bootstrap icon base on wether code
             let intWeatherCode = data.current.weather_code;
 
             if (intWeatherCode === 0) {
-                document.querySelector("#lblcondition").textContent = "clear sky";
-                document.querySelector("#icoweather").className = "bi bi-brightness-high fs-1";
+
+                document.querySelector("#condition").innerHTML = "sunny";
+
+                document.querySelector("#weather").className = "bi bi-brightness-high fs-1";
             }
             else if (intWeatherCode >= 1 && intWeatherCode <= 3) {
-                document.querySelector("#lblcondition").textContent = "partly cloudy";
-                document.querySelector("#icoweather").className = "bi bi-cloud-sun fs-1";
+
+                document.querySelector("#condition").innerHTML = "partly cloudy";
+
+                document.querySelector("#weather").className = "bi bi-cloud-sun fs-1";
             }
             else if (intWeatherCode >= 51 && intWeatherCode <= 67) {
-                document.querySelector("#lblcondition").textContent = "rainy";
-                document.querySelector("#icoweather").className = "bi bi-cloud-rain fs-1";
+
+                document.querySelector("#condition").innerHTML = "raining";
+
+                document.querySelector("#weather").className = "bi bi-cloud-rain fs-1";
             }
             else if (intWeatherCode >= 71 && intWeatherCode <= 77) {
-                document.querySelector("#lblcondition").textContent = "snow";
-                document.querySelector("#icoweather").className = "bi bi-cloud-snow fs-1";
+
+                document.querySelector("#condition").innerHTML = "snowing";
+
+                document.querySelector("#weather").className = "bi bi-cloud-snow fs-1";
             }
             else if (intWeatherCode >= 95) {
-                document.querySelector("#lblcondition").textContent = "thunderstorm";
-                document.querySelector("#icoweather").className = "bi bi-cloud-lightning-rain fs-1";
+
+                document.querySelector("#condition").innerHTML = "storm";
+
+                document.querySelector("#weather").className = "bi bi-cloud-lightning-rain fs-1";
             }
             else {
-                document.querySelector("#lblcondition").textContent = "weather unavailable";
-                document.querySelector("#icoweather").className = "bi bi-cloud fs-1";
+
+                document.querySelector("#condition").innerHTML = "weather unavailable";
+
+                document.querySelector("#weather").className = "bi bi-cloud fs-1";
             }
         }
     })
+    //error handing for cases such as no internet or request crashed
     .catch(() => {
-        document.querySelector("#lblcondition").textContent = "there was an error loading data.";
-        document.querySelector("#lbltemp").textContent = "-- °F";
-        document.querySelector("#lblhumidity").textContent = "Humidity: --%";
+        document.querySelector("#condition").innerHTML = "there was an error loading data.";
+
+        document.querySelector("#temp").innerHTML = "-- °F";
+
+        document.querySelector("#humidity").innerHTML = "Humidity: --%";
     });
     </script>
 </body>
